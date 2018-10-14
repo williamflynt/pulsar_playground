@@ -75,12 +75,17 @@ Vagrant.configure("2") do |config|
     apt-get update
     apt-get upgrade
     apt-get install -y openjdk-8-jdk
+
+    mkdir /home/vagrant/pulsar
+    chown vagrant:vagrant /home/vagrant/pulsar
+
     # cp /home/vagrant/setup/pulsar_start /etc/init.d/pulsar
     cp /home/vagrant/setup/pulsar.service /etc/systemd/system/pulsar.service
     systemctl daemon-reload
     systemctl enable pulsar
     # chmod 755 /etc/init.d/pulsar
     # update-rc.d pulsar defaults
+
     cd /opt
     wget https://mirrors.ocf.berkeley.edu/apache/pulsar/pulsar-2.1.1-incubating/apache-pulsar-2.1.1-incubating-bin.tar.gz
     mkdir /opt/pulsar
@@ -91,5 +96,6 @@ Vagrant.configure("2") do |config|
     ./pulsar-admin tenants create sensor_mon
     ./pulsar-admin namespaces create sensor_mon/etl
 
+    systemctl start pulsar
   SHELL
 end
