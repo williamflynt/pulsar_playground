@@ -1,0 +1,13 @@
+[Unit]
+Description=Apache Pulsar Standalone Service
+After=network.target
+
+[Service]
+Type=simple
+User=vagrant
+WorkingDirectory=/home/vagrant/pulsar
+ExecStart=/opt/pulsar/bin/pulsar standalone
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

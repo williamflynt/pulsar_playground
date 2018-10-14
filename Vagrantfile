@@ -50,6 +50,7 @@ Vagrant.configure("2") do |config|
 
   # Copy the pulsar standalone startup script to vagrant box
   config.vm.provision "file", source: "./setup/pulsar_start", destination: "~/setup/pulsar_start"
+  config.vm.provision "file", source: "./setup/pulsar.service", destination: "~/setup/pulsar.service"
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
@@ -74,9 +75,12 @@ Vagrant.configure("2") do |config|
     apt-get update
     apt-get upgrade
     apt-get install -y openjdk-8-jdk
-    cp /home/vagrant/setup/pulsar_start /etc/init.d/pulsar_start
-    chmod 755 /etc/init.d/pulsar_start
-    update-rc.d pulsar_start defaults
+    # cp /home/vagrant/setup/pulsar_start /etc/init.d/pulsar
+    cp /home/vagrant/setup/pulsar.service /etc/systemd/system/pulsar.service
+    systemctl daemon-reload
+    systemctl enable pulsar
+    # chmod 755 /etc/init.d/pulsar
+    # update-rc.d pulsar defaults
     cd /opt
     wget https://mirrors.ocf.berkeley.edu/apache/pulsar/pulsar-2.1.1-incubating/apache-pulsar-2.1.1-incubating-bin.tar.gz
     mkdir /opt/pulsar
